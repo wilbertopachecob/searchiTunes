@@ -1,0 +1,23 @@
+<div class="col-xs-6 col-md-6" style="margin:20px 0px 20px;"> 
+  <div class="container">
+  <form [formGroup]="f">
+      <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search" [formControlName]="'search'" />
+      </div>    
+  </form>
+  <hr />
+  <p *ngIf="loading"> Loading...</p>
+  <div class="list-group">
+  <a 
+  *ngFor="let item of searchItems | async" 
+  class="list-group-item list-group-item-action" [routerLink]="['/artist', item.artistId]">
+  <img src="{{ item.artworkUrl60 }}" />
+  {{ item.trackName }} <br/>
+  <audio controls preload="none" style="margin-top: 10px;" #audio (play)="stopAll(audio)">
+ <source src="{{ item.previewUrl }}" type="audio/mp4" />
+ <p>Your browser does not support HTML5 audio.</p>
+ </audio>
+  </a>
+</div>
+</div>
+</div>

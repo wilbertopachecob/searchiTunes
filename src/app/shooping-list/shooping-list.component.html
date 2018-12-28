@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-sm-12">
+
+    <div class="jumbotron jumbotron-fluid" *ngIf="shoppingItems.length === 0;else shoppingTable">
+      <div class="container">
+        <h1 style="font-weight: normal;">Nothing here yet</h1>
+        <p class="lead">Start searching and buying mate.</p>
+      </div>
+    </div>
+    <ng-template #shoppingTable>
+      <div class="container" style="margin-top:10px;">
+        <div><strong>Total: </strong> ${{ total }}</div>
+        <form>
+          <!-- <div><strong>Total: $</strong> {{ total }}</div> -->
+          <table class="table table-hover">
+            <thead>
+              <th>
+                <input type="checkbox" id="selectAll" (click)="checked($event)" checked>
+              </th>
+              <th scope="col">Item</th>
+              <th scope="col">Description</th>
+              <th scope="col">Price</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of shoppingItems">
+                <td><input type="checkbox" name="deleteItem" (change)="changeTotal($event, item)" checked /></td>
+                <td> <img src="{{ item.artworkUrl60 }}" /></td>
+                <!-- album.collectionName, album.collectionPrice, album.artworkUrl60 -->
+                <td><span class="badge" [ngClass]="{
+                  'badge-warning':(item.trackName),
+                  'badge-info':(!item.trackName)
+                }">{{ (item.trackName) ? 'Song' : 'Album' }}</span> <br />
+                  <strong>Title:</strong> {{ (item.trackName) ? item.trackName : item.collectionName }}
+                </td>
+                <td>{{ (item.trackPrice) ? item.trackPrice : item.collectionPrice }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="submit" class="btn btn-primary">Buy</button>
+        </form>
+      </div>
+    </ng-template>
+  </div>
+</div>

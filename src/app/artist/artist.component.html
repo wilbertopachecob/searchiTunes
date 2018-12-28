@@ -1,0 +1,20 @@
+  <div class="row" style="margin-top:10px;">
+    <div class="col-sm-6">
+      <div class="container">
+        <h2 style="font-weight:normal;">Artist: {{artist.artistName}} <span class="badge badge-secondary">{{artist.primaryGenreName}}</span></h2>
+        <hr/> 
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['songs']" [routerLinkActive]="['active']">Songs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['albums']" [routerLinkActive]="['active']">Albums</a>
+          </li>
+        </ul>
+        
+        <router-outlet></router-outlet>    
+      </div>     
+    </div>
+   
+  </div>
+  
