@@ -23,11 +23,13 @@ export class ShoopingListComponent implements OnInit {
 
   getTotal() {
     if (this.shoppingItems.length) {
-      this.total = this.shoppingItems.map((item) => {
+      let a: number = 0;
+      a = this.shoppingItems.map((item) => {
         return (item.trackPrice) ? item.trackPrice : item.collectionPrice;
       }).reduce((total, num) => {
         return total + num;
       });
+      this.total = parseFloat((a).toFixed(2));
     }
 
   }
@@ -42,7 +44,9 @@ export class ShoopingListComponent implements OnInit {
 
   changeTotal(e, item) {
     let price = (item.trackPrice) ? item.trackPrice : item.collectionPrice;
-
+    //Casting the element so it wont trow me an error
+    //With this we unckeck the main checkbox selector everytime the user clicks on th other ones
+    (<HTMLInputElement>document.getElementById('selectAll')).checked = false;
     if (e.srcElement.checked) {
       //Fixing the problem with big floating numbers
       this.total = parseFloat((this.total + price).toFixed(2));
@@ -61,8 +65,8 @@ export class ShoopingListComponent implements OnInit {
       // });
       let checkboxes = document.getElementsByTagName('input');
       for (var i in checkboxes) {
-        if(checkboxes[i].type == 'checkbox')
-        checkboxes[i].checked = true;
+        if (checkboxes[i].type == 'checkbox')
+          checkboxes[i].checked = true;
       }
       this.getTotal();
     }
@@ -72,16 +76,16 @@ export class ShoopingListComponent implements OnInit {
       // });
       let checkboxes = document.getElementsByTagName('input');
       for (var i in checkboxes) {
-        if(checkboxes[i].type == 'checkbox')
-        checkboxes[i].checked = false;
+        if (checkboxes[i].type == 'checkbox')
+          checkboxes[i].checked = false;
       }
       this.total = 0;
     }
   }
 
-  buy(form){
+  buy(form) {
     //do something to 
     console.log('Im buying staff');
-    
+
   }
 }
