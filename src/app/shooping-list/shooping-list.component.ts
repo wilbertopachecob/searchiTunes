@@ -55,6 +55,7 @@ export class ShoopingListComponent implements OnInit {
 
   checked(e) {
     if (e.srcElement.checked) {
+      //For some weird reason this is not working =(
       // Array.from(document.querySelectorAll("input[type='checkbox']")).forEach((elem, index) => {
       //   elem.setAttribute('checked', '');
       // });
@@ -76,5 +77,11 @@ export class ShoopingListComponent implements OnInit {
       }
       this.total = 0;
     }
+  }
+
+  buy(form){
+    //do something to 
+    console.log('Im buying staff');
+    
   }
 }
