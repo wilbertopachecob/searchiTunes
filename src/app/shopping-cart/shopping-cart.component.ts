@@ -1,5 +1,6 @@
 import { NgClass } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CartItem } from './cart-item.model';
 import { ShoppingService } from './shopping.service';
@@ -11,47 +12,44 @@ import { ShoppingService } from './shopping.service';
 })
 export class ShoppingCartComponent implements OnInit {
   private readonly shoppingService = inject(ShoppingService);
+  private readonly snackBar = inject(MatSnackBar);
 
   shoppingItems: CartItem[] = [];
   total = 0;
-  private selectedItems = new Set<CartItem>();
+  private selectedItems = new Set<string>();
 
   ngOnInit(): void {
-    this.shoppingItems = this.shoppingService.getItems();
     this.shoppingService.items$.subscribe((items) => {
       this.shoppingItems = items;
-      this.selectedItems = new Set(items);
+      this.selectedItems = new Set(items.map((item) => item.id));
       this.recalculateTotal();
     });
   }
 
-  itemPrice(item: CartItem): number {
-    return item.trackPrice ?? item.collectionPrice ?? 0;
-  }
-
-  itemTitle(item: CartItem): string {
-    return item.trackName ?? item.collectionName ?? 'Unknown';
-  }
-
-  isSong(item: CartItem): boolean {
-    return Boolean(item.trackName);
-  }
-
+  /**
+   * Tracks whether an item is currently selected.
+   */
   isSelected(item: CartItem): boolean {
-    return this.selectedItems.has(item);
+    return this.selectedItems.has(item.id);
   }
 
+  /**
+   * Toggles a single row selection.
+   */
   toggleItem(item: CartItem, checked: boolean): void {
     if (checked) {
-      this.selectedItems.add(item);
+      this.selectedItems.add(item.id);
     } else {
-      this.selectedItems.delete(item);
+      this.selectedItems.delete(item.id);
     }
     this.recalculateTotal();
   }
 
+  /**
+   * Selects or unselects all rows.
+   */
   toggleAll(checked: boolean): void {
-    this.selectedItems = checked ? new Set(this.shoppingItems) : new Set();
+    this.selectedItems = checked ? new Set(this.shoppingItems.map((item) => item.id)) : new Set();
     this.recalculateTotal();
   }
 
@@ -59,14 +57,40 @@ export class ShoppingCartComponent implements OnInit {
     return this.shoppingItems.length > 0 && this.selectedItems.size === this.shoppingItems.length;
   }
 
+  /**
+   * Removes one item from the cart.
+   */
+  remove(item: CartItem): void {
+    this.shoppingService.removeItem(item.id);
+    this.snackBar.open(`Removed "${item.title}"`, 'OK', { duration: 1400 });
+  }
+
+  /**
+   * Simulates checkout and removes purchased rows.
+   */
   buy(): void {
-    const purchased = this.shoppingItems.filter((item) => this.selectedItems.has(item));
-    console.log('Purchase simulation:', purchased, 'Total:', this.total);
-    alert(`Demo purchase complete for $${this.total.toFixed(2)}`);
+    const selectedIds = [...this.selectedItems];
+    if (selectedIds.length === 0) {
+      this.snackBar.open('Select at least one item to continue', 'OK', { duration: 1400 });
+      return;
+    }
+
+    selectedIds.forEach((id) => this.shoppingService.removeItem(id));
+    this.snackBar.open(`Purchase complete for USD ${this.total.toFixed(2)}`, 'Nice', { duration: 2200 });
+  }
+
+  /**
+   * Empties the cart.
+   */
+  clearCart(): void {
+    this.shoppingService.clear();
+    this.snackBar.open('Cart cleared', 'OK', { duration: 1400 });
   }
 
   private recalculateTotal(): void {
-    this.total = [...this.selectedItems].reduce((sum, item) => sum + this.itemPrice(item), 0);
+    this.total = this.shoppingItems
+      .filter((item) => this.selectedItems.has(item.id))
+      .reduce((sum, item) => sum + item.price, 0);
     this.total = parseFloat(this.total.toFixed(2));
   }
 }

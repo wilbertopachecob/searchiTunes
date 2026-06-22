@@ -7,7 +7,7 @@ import { HeaderComponent } from './header/header.component';
   imports: [RouterOutlet, HeaderComponent],
   template: `
     <app-header />
-    <main class="container-fluid">
+    <main class="app-shell">
       <router-outlet />
     </main>
   `,

@@ -1,32 +1,13 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/home">iTunes Search</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/search" routerLinkActive="active">Search</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/shopping-cart" routerLinkActive="active">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="badge text-bg-secondary ms-1">{{ cartCount$ | async }}</span>
-          </a>
-        </li>
-      </ul>
-    </div>
+<header class="app-header">
+  <div class="header-inner">
+    <a class="brand" routerLink="/home">SearchiTunes</a>
+    <nav class="main-nav">
+      <a routerLink="/home" routerLinkActive="active">Home</a>
+      <a routerLink="/search" routerLinkActive="active">Search</a>
+      <a routerLink="/shopping-cart" routerLinkActive="active" class="cart-link">
+        Cart
+        <span class="cart-count">{{ cartCount$ | async }}</span>
+      </a>
+    </nav>
   </div>
-</nav>
+</header>

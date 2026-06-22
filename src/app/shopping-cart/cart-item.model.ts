@@ -1,7 +1,16 @@
+export type CartItemType = 'song' | 'album';
+
+/**
+ * Canonical purchasable item used across search, artist, and cart views.
+ */
 export interface CartItem {
-  artworkUrl60: string;
-  trackName?: string;
-  collectionName?: string;
-  trackPrice?: number;
-  collectionPrice?: number;
+  id: string;
+  type: CartItemType;
+  artistId: number;
+  artistName: string;
+  title: string;
+  artworkUrl: string;
+  price: number;
+  currency: string;
+  previewUrl?: string;
 }

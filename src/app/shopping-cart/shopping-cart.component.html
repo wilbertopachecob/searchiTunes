@@ -1,13 +1,16 @@
 @if (shoppingItems.length === 0) {
-  <div class="p-5 my-4 bg-light rounded-3 text-center">
-    <h1 class="display-6">Nothing here yet</h1>
-    <p class="lead">Search for music and add songs or albums to your cart.</p>
+  <div class="empty-cart">
+    <h1>Nothing here yet</h1>
+    <p>Search for music and add songs or albums to your cart.</p>
   </div>
 } @else {
-  <div class="container my-4">
-    <div class="mb-3"><strong>Total:</strong> ${{ total }}</div>
+  <section class="page-section">
+    <header class="section-header row-header">
+      <h1>Your cart</h1>
+      <p>Total (selected): USD {{ total.toFixed(2) }}</p>
+    </header>
     <div class="table-responsive">
-      <table class="table table-hover align-middle">
+      <table class="table app-table">
         <thead>
           <tr>
             <th>
@@ -18,12 +21,13 @@
               />
             </th>
             <th scope="col">Item</th>
-            <th scope="col">Description</th>
+            <th scope="col">Details</th>
             <th scope="col">Price</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
-          @for (item of shoppingItems; track itemTitle(item)) {
+          @for (item of shoppingItems; track item.id) {
             <tr>
               <td>
                 <input
@@ -32,26 +36,35 @@
                   (change)="toggleItem(item, $any($event.target).checked)"
                 />
               </td>
-              <td><img [src]="item.artworkUrl60" [alt]="itemTitle(item)" width="48" height="48" /></td>
+              <td><img [src]="item.artworkUrl" [alt]="item.title" width="48" height="48" class="rounded-2" /></td>
               <td>
                 <span
-                  class="badge"
+                  class="badge rounded-pill"
                   [ngClass]="{
-                    'text-bg-warning': isSong(item),
-                    'text-bg-info': !isSong(item),
+                    'text-bg-warning': item.type === 'song',
+                    'text-bg-info': item.type === 'album',
                   }"
                 >
-                  {{ isSong(item) ? 'Song' : 'Album' }}
+                  {{ item.type === 'song' ? 'Song' : 'Album' }}
                 </span>
                 <br />
-                <strong>Title:</strong> {{ itemTitle(item) }}
+                <strong>{{ item.title }}</strong>
+                <div class="small text-muted">{{ item.artistName }}</div>
               </td>
-              <td>${{ itemPrice(item) }}</td>
+              <td>{{ item.currency }} {{ item.price.toFixed(2) }}</td>
+              <td>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="remove(item)">
+                  Remove
+                </button>
+              </td>
             </tr>
           }
         </tbody>
       </table>
     </div>
-    <button type="button" class="btn btn-primary" (click)="buy()">Buy</button>
-  </div>
+    <div class="cart-actions">
+      <button type="button" class="btn btn-outline-secondary" (click)="clearCart()">Clear cart</button>
+      <button type="button" class="btn btn-dark" (click)="buy()">Buy selected</button>
+    </div>
+  </section>
 }

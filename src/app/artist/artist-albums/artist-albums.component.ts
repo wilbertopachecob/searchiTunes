@@ -1,11 +1,12 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, switchMap } from 'rxjs/operators';
 
-import { Album, ItunesAlbumLookupResponse } from './album.model';
-import { ShoppingService } from '../../shopping-cart/shopping.service';
+import { ItunesDataService } from '@core/services/itunes-data.service';
+import { CartItem } from '@cart/cart-item.model';
+import { ShoppingService } from '@cart/shopping.service';
 
 @Component({
   selector: 'app-artist-albums',
@@ -14,29 +15,24 @@ import { ShoppingService } from '../../shopping-cart/shopping.service';
 })
 export class ArtistAlbumsComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly http = inject(HttpClient);
+  private readonly itunesDataService = inject(ItunesDataService);
   private readonly shoppingService = inject(ShoppingService);
+  private readonly snackBar = inject(MatSnackBar);
 
   albums$ = this.route.parent!.paramMap.pipe(
-    switchMap((params) =>
-      this.http.get<ItunesAlbumLookupResponse>(
-        `https://itunes.apple.com/lookup?id=${params.get('artistId')}&entity=album&limit=10`,
-      ),
-    ),
-    map((response) =>
-      response.results
-        .filter((item) => item.wrapperType !== 'artist')
-        .map(
-          (album): Album => ({
-            collectionName: album.collectionName,
-            collectionPrice: album.collectionPrice,
-            artworkUrl60: album.artworkUrl60,
-          }),
-        ),
-    ),
+    map((params) => params.get('artistId') ?? ''),
+    switchMap((artistId) => this.itunesDataService.getArtistAlbums(artistId)),
   );
 
-  addToCart(album: Album): void {
-    this.shoppingService.addItem(album);
+  /**
+   * Adds an album to the cart and shows lightweight feedback.
+   */
+  addToCart(album: CartItem): void {
+    const inserted = this.shoppingService.addItem(album);
+    this.snackBar.open(
+      inserted ? `"${album.title}" added to cart` : `"${album.title}" is already in your cart`,
+      'OK',
+      { duration: 1800 },
+    );
   }
 }

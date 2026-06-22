@@ -1,5 +1,5 @@
 <div class="table-responsive">
-  <table class="table table-hover align-middle">
+  <table class="table app-table">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -10,16 +10,14 @@
       </tr>
     </thead>
     <tbody>
-      @for (song of songs$ | async; track song.trackName; let i = $index) {
+      @for (song of songs$ | async; track song.id; let i = $index) {
         <tr>
           <th scope="row">{{ i + 1 }}</th>
-          <td><img [src]="song.artworkUrl60" [alt]="song.trackName" width="48" height="48" /></td>
-          <td>{{ song.trackName }}</td>
-          <td>${{ song.trackPrice }}</td>
+          <td><img [src]="song.artworkUrl" [alt]="song.title" width="48" height="48" class="rounded-2" /></td>
+          <td>{{ song.title }}</td>
+          <td>{{ song.currency }} {{ song.price.toFixed(2) }}</td>
           <td>
-            <button type="button" class="btn btn-primary btn-sm" (click)="addToCart(song)">
-              Add to Cart
-            </button>
+            <button type="button" class="btn btn-sm btn-dark" (click)="addToCart(song)">Add to Cart</button>
           </td>
         </tr>
       }
