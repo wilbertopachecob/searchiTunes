@@ -1,90 +1,61 @@
+import { AsyncPipe } from '@angular/common';
+import { Component, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
+
+import { SearchItem } from './search-item.model';
 import { SearchService } from './search.service';
-import { Searchitems } from './searchitem.model';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import { QueryList } from '@angular/core';
-import { Component, OnInit, ViewChildren, AfterViewInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
+  imports: [ReactiveFormsModule, AsyncPipe, RouterLink],
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
 })
-export class SearchComponent implements OnInit, AfterViewInit {
+export class SearchComponent implements OnInit {
+  private readonly searchService = inject(SearchService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
-  private loading: boolean = false;
-  searchItems: Observable<Searchitems[]>;
-  @ViewChildren('audio') audios: QueryList<HTMLAudioElement>;
-  private f: FormGroup;
-  //private searchField: FormControl;
+  @ViewChildren('audio') audios!: QueryList<{ nativeElement: HTMLAudioElement }>;
 
-  constructor(private serviceS: SearchService, 
-    private route: ActivatedRoute,
-    private router: Router) { }
+  loading = false;
+  searchItems$!: Observable<SearchItem[]>;
+  form = new FormGroup({
+    search: new FormControl('', { nonNullable: true }),
+  });
 
-  doSearch(searchValue): Observable<Searchitems[]> {
-    // this.searchItems = this.serviceS.search(searchValue.value);
-    //return this.serviceS.search(searchValue);
-    return this.serviceS.search(searchValue);
-  }
-
-  ngOnInit() {
-    this.f = new FormGroup({
-      'search': new FormControl()
-    });
-
-    this.route.params.subscribe(
-      (params: Params) => {
-        if (params['term']){
-          this.searchItems = this.serviceS.search(params['term']);
-        }
-      }
+  ngOnInit(): void {
+    this.searchItems$ = this.route.paramMap.pipe(
+      map((params) => params.get('term') ?? ''),
+      tap((term) => this.form.controls.search.setValue(term, { emitEvent: false })),
+      switchMap((term) => {
+        this.loading = true;
+        return this.searchService.search(term).pipe(tap(() => (this.loading = false)));
+      }),
+      startWith([]),
     );
 
+    this.form.controls.search.valueChanges
+      .pipe(debounceTime(400), distinctUntilChanged())
+      .subscribe((term) => {
+        this.router.navigate(['search', { term }]);
+      });
+  }
 
-    //Esto funciona pero vamos a usar SwitchMap
-
-    // this.f.get('search').valueChanges
-    // .debounceTime(400)
-    // .distinctUntilChanged()
-    // .do(_ => this.loading = true)
-    // .subscribe(res => {
-    //   this.searchItems = this.serviceS.search(res);
-    //   this.loading = false;
-    // })
-
-    //Usando SwitchMap para obtener lo mismo
-    // this.searchItems = this.f.get('search').valueChanges
-    //   .debounceTime(400)
-    //   .distinctUntilChanged()
-    //   .do(_ => this.loading = true)
-    //   .switchMap(term => this.doSearch(term))
-    //   .do(_ => this.loading = false);
-
-    //Adding Router
-    this.f.get('search').valueChanges.subscribe(term => 
-      {
-        this.router.navigate(['search', {term: term}])
+  stopAll(audio: HTMLAudioElement): void {
+    this.audios.forEach((element) => {
+      if (audio !== element.nativeElement) {
+        element.nativeElement.pause();
+      }
     });
   }
-
-  ngAfterViewInit() {
-    //this.audios.changes.subscribe(res => console.log(res));
-  }
-
-  stopAll(audio: HTMLAudioElement) {
-    this.audios.forEach(
-      function (audiof) {
-        if (audio !== audiof['nativeElement'])
-          audiof['nativeElement'].pause();
-      }
-    );
-  }
-
 }

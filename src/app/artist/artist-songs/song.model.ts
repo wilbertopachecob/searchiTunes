@@ -1,7 +1,16 @@
-export class Song{
-    constructor (
-        private trackName: string, 
-        private previewUrl:string,
-        private artworkUrl60: string,
-        private trackPrice: number ){}
+export interface Song {
+  trackName: string;
+  previewUrl: string;
+  artworkUrl60: string;
+  trackPrice: number;
+}
+
+export interface ItunesSongLookupResponse {
+  results: Array<{
+    wrapperType?: string;
+    trackName: string;
+    previewUrl: string;
+    artworkUrl60: string;
+    trackPrice: number;
+  }>;
 }

@@ -1,0 +1,57 @@
+@if (shoppingItems.length === 0) {
+  <div class="p-5 my-4 bg-light rounded-3 text-center">
+    <h1 class="display-6">Nothing here yet</h1>
+    <p class="lead">Search for music and add songs or albums to your cart.</p>
+  </div>
+} @else {
+  <div class="container my-4">
+    <div class="mb-3"><strong>Total:</strong> ${{ total }}</div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                [checked]="allSelected()"
+                (change)="toggleAll($any($event.target).checked)"
+              />
+            </th>
+            <th scope="col">Item</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of shoppingItems; track itemTitle(item)) {
+            <tr>
+              <td>
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(item)"
+                  (change)="toggleItem(item, $any($event.target).checked)"
+                />
+              </td>
+              <td><img [src]="item.artworkUrl60" [alt]="itemTitle(item)" width="48" height="48" /></td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'text-bg-warning': isSong(item),
+                    'text-bg-info': !isSong(item),
+                  }"
+                >
+                  {{ isSong(item) ? 'Song' : 'Album' }}
+                </span>
+                <br />
+                <strong>Title:</strong> {{ itemTitle(item) }}
+              </td>
+              <td>${{ itemPrice(item) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="buy()">Buy</button>
+  </div>
+}

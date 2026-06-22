@@ -1,22 +1,28 @@
-<div style="margin-top: 20px;">
-    <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col"></th>
-            <th scope="col">Price</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let song of canciones; index as i" >
-            <th scope="row">{{i +1}}</th>
-            <th><img src="{{ song.artworkUrl60 }}" /></th>
-            <td> {{song.trackName}}</td>
-            <td>${{ song.trackPrice }}</td>
-            <td><button class="btn btn-primary" (click)="addToCartS(song)">Add to Cart</button></td>
-          </tr>
-        </tbody>
-      </table>
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Artwork</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (song of songs$ | async; track song.trackName; let i = $index) {
+        <tr>
+          <th scope="row">{{ i + 1 }}</th>
+          <td><img [src]="song.artworkUrl60" [alt]="song.trackName" width="48" height="48" /></td>
+          <td>{{ song.trackName }}</td>
+          <td>${{ song.trackPrice }}</td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" (click)="addToCart(song)">
+              Add to Cart
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
 </div>
