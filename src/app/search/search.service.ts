@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ItunesDataService } from '../core/services/itunes-data.service';
+import { ItunesDataService } from '@core/services/itunes-data.service';
 import { SearchItem } from './search-item.model';
 
 @Injectable({ providedIn: 'root' })

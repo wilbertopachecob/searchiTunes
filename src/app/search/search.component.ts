@@ -14,8 +14,8 @@ import {
   tap,
 } from 'rxjs/operators';
 
-import { ItunesDataService } from '../core/services/itunes-data.service';
-import { ShoppingService } from '../shopping-cart/shopping.service';
+import { ItunesDataService } from '@core/services/itunes-data.service';
+import { ShoppingService } from '@cart/shopping.service';
 import { SearchItem } from './search-item.model';
 import { SearchService } from './search.service';
 

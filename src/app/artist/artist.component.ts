@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 
-import { ItunesDataService } from '../core/services/itunes-data.service';
+import { ItunesDataService } from '@core/services/itunes-data.service';
 
 @Component({
   selector: 'app-artist',

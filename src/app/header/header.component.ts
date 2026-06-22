@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { map } from 'rxjs/operators';
 
-import { ShoppingService } from '../shopping-cart/shopping.service';
+import { ShoppingService } from '@cart/shopping.service';
 
 @Component({
   selector: 'app-header',

@@ -3,8 +3,8 @@ import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 
-import { ItunesDataService } from '../core/services/itunes-data.service';
-import { ShoppingService } from '../shopping-cart/shopping.service';
+import { ItunesDataService } from '@core/services/itunes-data.service';
+import { ShoppingService } from '@cart/shopping.service';
 import { SearchItem } from './search-item.model';
 import { SearchComponent } from './search.component';
 import { SearchService } from './search.service';

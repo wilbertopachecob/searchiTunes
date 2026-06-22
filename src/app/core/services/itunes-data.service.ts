@@ -3,9 +3,9 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Artist, ItunesLookupResponse } from '../../artist/artist.model';
-import { SearchItem } from '../../search/search-item.model';
-import { CartItem } from '../../shopping-cart/cart-item.model';
+import { Artist, ItunesLookupResponse } from '@artist/artist.model';
+import { SearchItem } from '@search/search-item.model';
+import { CartItem } from '@cart/cart-item.model';
 
 interface ItunesMusicLookupResponse {
   results: Array<{

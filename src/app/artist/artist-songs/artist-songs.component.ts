@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, switchMap } from 'rxjs/operators';
 
-import { ItunesDataService } from '../../core/services/itunes-data.service';
-import { CartItem } from '../../shopping-cart/cart-item.model';
-import { ShoppingService } from '../../shopping-cart/shopping.service';
+import { ItunesDataService } from '@core/services/itunes-data.service';
+import { CartItem } from '@cart/cart-item.model';
+import { ShoppingService } from '@cart/shopping.service';
 
 @Component({
   selector: 'app-artist-songs',

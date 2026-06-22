@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
-import { ItunesDataService } from '../core/services/itunes-data.service';
+import { ItunesDataService } from '@core/services/itunes-data.service';
 import { SearchService } from './search.service';
 import { SearchItem } from './search-item.model';
 
