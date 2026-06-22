@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { provideAppTesting } from '@core/i18n/translate-testing';
 import { CartItem } from './cart-item.model';
 import { ShoppingCartComponent } from './shopping-cart.component';
 import { ShoppingService } from './shopping.service';
@@ -40,6 +41,7 @@ describe('ShoppingCartComponent', () => {
       providers: [
         { provide: ShoppingService, useValue: shoppingService },
         { provide: MatSnackBar, useValue: snackBar },
+        ...provideAppTesting(),
       ],
     }).compileComponents();
   });

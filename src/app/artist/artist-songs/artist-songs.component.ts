@@ -1,16 +1,20 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { map, switchMap } from 'rxjs/operators';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { ItunesDataService } from '@core/services/itunes-data.service';
 import { CartItem } from '@cart/cart-item.model';
 import { ShoppingService } from '@cart/shopping.service';
+import { LoadingStateComponent } from '@app/shared/loading-state/loading-state.component';
 
 @Component({
   selector: 'app-artist-songs',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, FaIconComponent, TranslatePipe, LoadingStateComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './artist-songs.component.html',
 })
 export class ArtistSongsComponent {
@@ -18,10 +22,16 @@ export class ArtistSongsComponent {
   private readonly itunesDataService = inject(ItunesDataService);
   private readonly shoppingService = inject(ShoppingService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
+
+  loading = true;
 
   songs$ = this.route.parent!.paramMap.pipe(
     map((params) => params.get('artistId') ?? ''),
-    switchMap((artistId) => this.itunesDataService.getArtistSongs(artistId)),
+    tap(() => (this.loading = true)),
+    switchMap((artistId) =>
+      this.itunesDataService.getArtistSongs(artistId).pipe(finalize(() => (this.loading = false))),
+    ),
   );
 
   /**
@@ -29,9 +39,10 @@ export class ArtistSongsComponent {
    */
   addToCart(song: CartItem): void {
     const inserted = this.shoppingService.addItem(song);
+    const key = inserted ? 'snackbar.addedToCart' : 'snackbar.alreadyInCart';
     this.snackBar.open(
-      inserted ? `"${song.title}" added to cart` : `"${song.title}" is already in your cart`,
-      'OK',
+      this.translate.instant(key, { title: song.title }),
+      this.translate.instant('snackbar.ok'),
       { duration: 1800 },
     );
   }

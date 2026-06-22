@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 
 import { ItunesDataService } from '@core/services/itunes-data.service';
+import { provideAppTesting } from '@core/i18n/translate-testing';
 import { ShoppingService } from '@cart/shopping.service';
 import { SearchItem } from './search-item.model';
 import { SearchComponent } from './search.component';
@@ -56,6 +57,7 @@ describe('SearchComponent', () => {
         { provide: MatSnackBar, useValue: snackBar },
         { provide: ActivatedRoute, useValue: { queryParamMap: of(convertToParamMap({ term: '' })) } },
         { provide: Router, useValue: router },
+        ...provideAppTesting(),
       ],
     }).compileComponents();
   });

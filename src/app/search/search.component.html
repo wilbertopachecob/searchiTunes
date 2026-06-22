@@ -1,21 +1,23 @@
 <section class="page-section">
   <div class="section-header">
-    <h1>Find music and add to cart</h1>
-    <p>Search tracks, preview snippets, and buy songs from one place.</p>
+    <h1>{{ 'search.title' | translate }}</h1>
+    <p>{{ 'search.subtitle' | translate }}</p>
   </div>
 
   <form [formGroup]="form" class="search-form">
     <input
       type="text"
       class="search-input"
-      placeholder="Search artists or songs..."
+      [placeholder]="'search.placeholder' | translate"
       formControlName="search"
     />
   </form>
 
-  @if (loading) {
-    <p class="state-note">Searching iTunes...</p>
-  }
+  <app-loading-state
+    [loading]="loading"
+    [message]="'search.loading' | translate"
+    [skeletonCount]="3"
+  />
 
   <div class="item-grid">
     @for (item of searchItems$ | async; track item.id) {
@@ -29,8 +31,14 @@
             <source [src]="item.previewUrl" type="audio/mp4" />
           </audio>
         </div>
-        <button type="button" class="btn btn-dark btn-sm" (click)="addToCart(item)" [disabled]="isInCart(item)">
-          {{ isInCart(item) ? 'Added' : 'Add to Cart' }}
+        <button
+          type="button"
+          class="btn btn-dark btn-sm btn-with-icon"
+          (click)="addToCart(item)"
+          [disabled]="isInCart(item)"
+        >
+          <fa-icon [icon]="isInCart(item) ? 'cart-shopping' : 'cart-plus'" />
+          {{ (isInCart(item) ? 'search.added' : 'search.addToCart') | translate }}
         </button>
       </article>
     }

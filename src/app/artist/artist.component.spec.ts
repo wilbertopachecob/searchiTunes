@@ -3,6 +3,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 
 import { ItunesDataService } from '@core/services/itunes-data.service';
+import { provideAppTesting } from '@core/i18n/translate-testing';
 import { ArtistComponent } from './artist.component';
 
 describe('ArtistComponent', () => {
@@ -20,6 +21,7 @@ describe('ArtistComponent', () => {
           provide: ActivatedRoute,
           useValue: { paramMap: of(convertToParamMap({ artistId: '900' })) },
         },
+        ...provideAppTesting(),
       ],
     });
 

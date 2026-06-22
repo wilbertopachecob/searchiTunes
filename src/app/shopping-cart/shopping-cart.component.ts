@@ -1,18 +1,22 @@
 import { NgClass } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { CartItem } from './cart-item.model';
 import { ShoppingService } from './shopping.service';
 
 @Component({
   selector: 'app-shopping-cart',
-  imports: [NgClass],
+  imports: [NgClass, FaIconComponent, TranslatePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './shopping-cart.component.html',
 })
 export class ShoppingCartComponent implements OnInit {
   private readonly shoppingService = inject(ShoppingService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
   shoppingItems: CartItem[] = [];
   total = 0;
@@ -62,7 +66,11 @@ export class ShoppingCartComponent implements OnInit {
    */
   remove(item: CartItem): void {
     this.shoppingService.removeItem(item.id);
-    this.snackBar.open(`Removed "${item.title}"`, 'OK', { duration: 1400 });
+    this.snackBar.open(
+      this.translate.instant('snackbar.removed', { title: item.title }),
+      this.translate.instant('snackbar.ok'),
+      { duration: 1400 },
+    );
   }
 
   /**
@@ -71,12 +79,20 @@ export class ShoppingCartComponent implements OnInit {
   buy(): void {
     const selectedIds = [...this.selectedItems];
     if (selectedIds.length === 0) {
-      this.snackBar.open('Select at least one item to continue', 'OK', { duration: 1400 });
+      this.snackBar.open(
+        this.translate.instant('snackbar.selectItem'),
+        this.translate.instant('snackbar.ok'),
+        { duration: 1400 },
+      );
       return;
     }
 
     selectedIds.forEach((id) => this.shoppingService.removeItem(id));
-    this.snackBar.open(`Purchase complete for USD ${this.total.toFixed(2)}`, 'Nice', { duration: 2200 });
+    this.snackBar.open(
+      this.translate.instant('snackbar.purchaseComplete', { total: this.total.toFixed(2) }),
+      this.translate.instant('snackbar.nice'),
+      { duration: 2200 },
+    );
   }
 
   /**
@@ -84,7 +100,11 @@ export class ShoppingCartComponent implements OnInit {
    */
   clearCart(): void {
     this.shoppingService.clear();
-    this.snackBar.open('Cart cleared', 'OK', { duration: 1400 });
+    this.snackBar.open(
+      this.translate.instant('snackbar.cartCleared'),
+      this.translate.instant('snackbar.ok'),
+      { duration: 1400 },
+    );
   }
 
   private recalculateTotal(): void {

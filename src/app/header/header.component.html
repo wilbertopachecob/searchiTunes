@@ -2,12 +2,20 @@
   <div class="header-inner">
     <a class="brand" routerLink="/home">SearchiTunes</a>
     <nav class="main-nav">
-      <a routerLink="/home" routerLinkActive="active">Home</a>
-      <a routerLink="/search" routerLinkActive="active">Search</a>
-      <a routerLink="/shopping-cart" routerLinkActive="active" class="cart-link">
-        Cart
+      <a routerLink="/home" routerLinkActive="active" class="nav-link-with-icon">
+        <fa-icon icon="house" />
+        {{ 'nav.home' | translate }}
+      </a>
+      <a routerLink="/search" routerLinkActive="active" class="nav-link-with-icon">
+        <fa-icon icon="magnifying-glass" />
+        {{ 'nav.search' | translate }}
+      </a>
+      <a routerLink="/shopping-cart" routerLinkActive="active" class="nav-link-with-icon cart-link">
+        <fa-icon icon="cart-shopping" />
+        {{ 'nav.cart' | translate }}
         <span class="cart-count">{{ cartCount$ | async }}</span>
       </a>
+      <app-language-switcher />
     </nav>
   </div>
 </header>
