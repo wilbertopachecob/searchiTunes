@@ -1,20 +1,13 @@
 @if (artist$ | async; as artist) {
-  <div class="row mt-3">
-    <div class="col-12 col-lg-8 mx-auto">
-      <h2 class="fw-normal">
-        Artist: {{ artist.artistName }}
-        <span class="badge text-bg-secondary">{{ artist.primaryGenreName }}</span>
-      </h2>
-      <hr />
-      <ul class="nav nav-pills mb-3">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="songs" routerLinkActive="active">Songs</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="albums" routerLinkActive="active">Albums</a>
-        </li>
-      </ul>
-      <router-outlet />
+  <section class="page-section">
+    <header class="section-header">
+      <h1>{{ artist.artistName }}</h1>
+      <p>{{ artist.primaryGenreName }}</p>
+    </header>
+    <div class="artist-tabs">
+      <a class="btn btn-outline-dark btn-sm" routerLink="songs" routerLinkActive="active">Songs</a>
+      <a class="btn btn-outline-dark btn-sm" routerLink="albums" routerLinkActive="active">Albums</a>
     </div>
-  </div>
+    <router-outlet />
+  </section>
 }

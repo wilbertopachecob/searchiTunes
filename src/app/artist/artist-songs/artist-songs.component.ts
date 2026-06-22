@@ -1,10 +1,11 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, switchMap } from 'rxjs/operators';
 
-import { ItunesSongLookupResponse, Song } from './song.model';
+import { ItunesDataService } from '../../core/services/itunes-data.service';
+import { CartItem } from '../../shopping-cart/cart-item.model';
 import { ShoppingService } from '../../shopping-cart/shopping.service';
 
 @Component({
@@ -14,30 +15,24 @@ import { ShoppingService } from '../../shopping-cart/shopping.service';
 })
 export class ArtistSongsComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly http = inject(HttpClient);
+  private readonly itunesDataService = inject(ItunesDataService);
   private readonly shoppingService = inject(ShoppingService);
+  private readonly snackBar = inject(MatSnackBar);
 
   songs$ = this.route.parent!.paramMap.pipe(
-    switchMap((params) =>
-      this.http.get<ItunesSongLookupResponse>(
-        `https://itunes.apple.com/lookup?id=${params.get('artistId')}&entity=song&limit=10`,
-      ),
-    ),
-    map((response) =>
-      response.results
-        .filter((item) => item.wrapperType !== 'artist')
-        .map(
-          (song): Song => ({
-            trackName: song.trackName,
-            previewUrl: song.previewUrl,
-            artworkUrl60: song.artworkUrl60,
-            trackPrice: song.trackPrice,
-          }),
-        ),
-    ),
+    map((params) => params.get('artistId') ?? ''),
+    switchMap((artistId) => this.itunesDataService.getArtistSongs(artistId)),
   );
 
-  addToCart(song: Song): void {
-    this.shoppingService.addItem(song);
+  /**
+   * Adds a song to the cart and shows lightweight feedback.
+   */
+  addToCart(song: CartItem): void {
+    const inserted = this.shoppingService.addItem(song);
+    this.snackBar.open(
+      inserted ? `"${song.title}" added to cart` : `"${song.title}" is already in your cart`,
+      'OK',
+      { duration: 1800 },
+    );
   }
 }
