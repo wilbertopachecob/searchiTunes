@@ -15,18 +15,7 @@
         {{ 'nav.cart' | translate }}
         <span class="cart-count">{{ cartCount$ | async }}</span>
       </a>
-      <div class="lang-switcher" role="group" aria-label="Language">
-        @for (lang of languageService.languages; track lang) {
-          <button
-            type="button"
-            class="lang-btn"
-            [class.active]="languageService.currentLang() === lang"
-            (click)="setLanguage(lang)"
-          >
-            {{ lang | uppercase }}
-          </button>
-        }
-      </div>
+      <app-language-switcher />
     </nav>
   </div>
 </header>
