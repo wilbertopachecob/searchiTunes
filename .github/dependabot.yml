@@ -5,9 +5,66 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
+    groups:
+      angular:
+        applies-to: version-updates
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+        update-types:
+          - minor
+          - patch
+      typescript-eslint:
+        applies-to: version-updates
+        patterns:
+          - "@typescript-eslint/*"
+        update-types:
+          - minor
+          - patch
+      jest:
+        applies-to: version-updates
+        patterns:
+          - "jest"
+          - "jest-*"
+          - "ts-jest"
+          - "@types/jest"
+        update-types:
+          - minor
+          - patch
+      fontawesome:
+        applies-to: version-updates
+        patterns:
+          - "@fortawesome/*"
+        update-types:
+          - minor
+          - patch
+      ngx-translate:
+        applies-to: version-updates
+        patterns:
+          - "@ngx-translate/*"
+        update-types:
+          - minor
+          - patch
+      angular-runtime:
+        applies-to: version-updates
+        patterns:
+          - "rxjs"
+          - "zone.js"
+          - "tslib"
+        update-types:
+          - minor
+          - patch
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
+    groups:
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
