@@ -1,3 +1,11 @@
-export class Artist{
-    constructor(private artistName: string, private primaryGenreName: string){}
+export interface Artist {
+  artistName: string;
+  primaryGenreName: string;
+}
+
+export interface ItunesLookupResponse {
+  results: Array<{
+    artistName: string;
+    primaryGenreName: string;
+  }>;
 }

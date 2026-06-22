@@ -1,27 +1,45 @@
 # SearchiTunes
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+A small Angular app that searches the public [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html), previews tracks, browses an artist's songs and albums, and simulates a shopping cart.
 
-## Development server
+Originally built in 2018 as an Angular 5 learning project. Modernized to **Angular 19** so it runs on current Node.js versions.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Features
 
-## Code scaffolding
+- Search music with debounced queries and 30-second previews
+- Artist detail pages with songs and albums tabs
+- Shopping cart with item selection and total calculation
+- Hash-based routing (works when hosted as static files)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Requirements
+
+- Node.js 20+ (tested on Node 26)
+- npm 10+
+
+## Development
+
+```bash
+npm install
+npm start
+```
+
+Open [http://localhost:4200](http://localhost:4200).
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+```bash
+npm run build
+```
 
-## Running unit tests
+Output is written to `dist/searchi-tunes/`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Tech stack
 
-## Running end-to-end tests
+- Angular 19 (standalone components, lazy routes)
+- RxJS 7
+- Bootstrap 5 (CDN)
+- iTunes Search API (no API key required)
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## License
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+MIT

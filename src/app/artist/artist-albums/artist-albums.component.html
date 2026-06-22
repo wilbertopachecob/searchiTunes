@@ -1,22 +1,30 @@
-<div style="margin-top: 20px;">
-    <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col"></th>
-            <th scope="col">Price</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let album of albums; index as i" >
-            <th scope="row">{{i +1}}</th>
-            <th><img src="{{ album.artworkUrl60 }}" /></th>
-            <td> {{album.collectionName}}</td>
-            <td>${{ album.collectionPrice }}</td>
-            <td><td><button class="btn btn-primary" (click)="addToCartA(album)">Add to Cart</button></td>
-          </tr>
-        </tbody>
-      </table>
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Artwork</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (album of albums$ | async; track album.collectionName; let i = $index) {
+        <tr>
+          <th scope="row">{{ i + 1 }}</th>
+          <td>
+            <img [src]="album.artworkUrl60" [alt]="album.collectionName" width="48" height="48" />
+          </td>
+          <td>{{ album.collectionName }}</td>
+          <td>${{ album.collectionPrice }}</td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" (click)="addToCart(album)">
+              Add to Cart
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
 </div>

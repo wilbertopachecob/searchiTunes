@@ -1,45 +1,42 @@
-import { Albums } from './albums-model';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { ShoopingService } from '../../shooping-list/shooping.service';
+import { ActivatedRoute } from '@angular/router';
+import { map, switchMap } from 'rxjs/operators';
+
+import { Album, ItunesAlbumLookupResponse } from './album.model';
+import { ShoppingService } from '../../shopping-cart/shopping.service';
 
 @Component({
   selector: 'app-artist-albums',
+  imports: [AsyncPipe],
   templateUrl: './artist-albums.component.html',
-  styleUrls: ['./artist-albums.component.css']
 })
-export class ArtistAlbumsComponent implements OnInit {
+export class ArtistAlbumsComponent {
+  private readonly route = inject(ActivatedRoute);
+  private readonly http = inject(HttpClient);
+  private readonly shoppingService = inject(ShoppingService);
 
-  albums: Albums[] = [];
+  albums$ = this.route.parent!.paramMap.pipe(
+    switchMap((params) =>
+      this.http.get<ItunesAlbumLookupResponse>(
+        `https://itunes.apple.com/lookup?id=${params.get('artistId')}&entity=album&limit=10`,
+      ),
+    ),
+    map((response) =>
+      response.results
+        .filter((item) => item.wrapperType !== 'artist')
+        .map(
+          (album): Album => ({
+            collectionName: album.collectionName,
+            collectionPrice: album.collectionPrice,
+            artworkUrl60: album.artworkUrl60,
+          }),
+        ),
+    ),
+  );
 
-  constructor(
-    private route: ActivatedRoute, 
-    private http: HttpClient,
-  private shoopSer: ShoopingService) { }
-
-  ngOnInit() {
-    this.route.parent.params.subscribe((params: Params) => {
-      this.http.get(`https://itunes.apple.com/lookup?id=${params['artistId']}&entity=album&limit=10`)
-      .map(res => {
-        res['results'].shift();
-        return res['results'].map(album => {
-          return new Albums(album.collectionName, album.collectionPrice, album.artworkUrl60)
-        });
-      })
-      .subscribe( (data: Albums[]) =>
-        {
-          this.albums = data;
-        },
-        error => {
-          console.log(error);
-        }
-      );
-    });
+  addToCart(album: Album): void {
+    this.shoppingService.addItem(album);
   }
-
-  addToCartA(album: Albums){
-    this.shoopSer.addItem(album);
-  }
-
 }

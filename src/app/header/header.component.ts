@@ -1,23 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ShoopingService } from '../shooping-list/shooping.service';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { map } from 'rxjs/operators';
+
+import { ShoppingService } from '../shopping-cart/shopping.service';
 
 @Component({
   selector: 'app-header',
+  imports: [RouterLink, RouterLinkActive, AsyncPipe],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
+  private readonly shoppingService = inject(ShoppingService);
 
-  amountShooping: number;
-  constructor(private shoopingS: ShoopingService) {
-  }
-
-  ngOnInit() {
-    this.shoopingS.newItemsarreglo.subscribe(
-      data => {
-        this.amountShooping = data.length;
-      },
-      error => { console.log(error) });
-  }
-
+  cartCount$ = this.shoppingService.items$.pipe(map((items) => items.length));
 }

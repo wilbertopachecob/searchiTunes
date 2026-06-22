@@ -1,23 +1,40 @@
-<div class="col-xs-6 col-md-6" style="margin:20px 0px 20px;"> 
-  <div class="container">
-  <form [formGroup]="f">
-      <div class="form-group">
-      <input type="text" class="form-control" placeholder="Search" [formControlName]="'search'" />
-      </div>    
+<div class="col-12 col-md-8 col-lg-6 mx-auto my-4">
+  <form [formGroup]="form">
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control form-control-lg"
+        placeholder="Search artists, songs, or albums..."
+        formControlName="search"
+      />
+    </div>
   </form>
-  <hr />
-  <p *ngIf="loading"> Loading...</p>
+
+  @if (loading) {
+    <p class="text-muted">Loading...</p>
+  }
+
   <div class="list-group">
-  <a 
-  *ngFor="let item of searchItems | async" 
-  class="list-group-item list-group-item-action" [routerLink]="['/artist', item.artistId]">
-  <img src="{{ item.artworkUrl60 }}" />
-  {{ item.trackName }} <br/>
-  <audio controls preload="none" style="margin-top: 10px;" #audio (play)="stopAll(audio)">
- <source src="{{ item.previewUrl }}" type="audio/mp4" />
- <p>Your browser does not support HTML5 audio.</p>
- </audio>
-  </a>
-</div>
-</div>
+    @for (item of searchItems$ | async; track item.artistId + item.trackName) {
+      <a
+        class="list-group-item list-group-item-action d-flex gap-3 align-items-start"
+        [routerLink]="['/artist', item.artistId]"
+      >
+        <img [src]="item.artworkUrl60" [alt]="item.trackName" width="60" height="60" />
+        <div class="flex-grow-1">
+          <div class="fw-semibold">{{ item.trackName }}</div>
+          <audio
+            controls
+            preload="none"
+            class="mt-2 w-100"
+            #audio
+            (play)="stopAll(audio)"
+            (click)="$event.stopPropagation()"
+          >
+            <source [src]="item.previewUrl" type="audio/mp4" />
+          </audio>
+        </div>
+      </a>
+    }
+  </div>
 </div>
