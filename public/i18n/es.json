@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "search": "Buscar",
+    "cart": "Carrito"
+  },
+  "home": {
+    "eyebrow": "Descubre música y compra",
+    "title": "Bienvenido a SearchiTunes",
+    "description": "Encuentra artistas, escucha vistas previas, explora álbumes y compra canciones con un flujo de carrito moderno.",
+    "cta": "Empezar a buscar"
+  },
+  "search": {
+    "title": "Encuentra música y añádela al carrito",
+    "subtitle": "Busca canciones, escucha fragmentos y compra desde un solo lugar.",
+    "placeholder": "Buscar artistas o canciones...",
+    "loading": "Buscando en iTunes...",
+    "addToCart": "Añadir al carrito",
+    "added": "Añadido"
+  },
+  "artist": {
+    "songs": "Canciones",
+    "albums": "Álbumes",
+    "loading": "Cargando artista..."
+  },
+  "table": {
+    "number": "#",
+    "artwork": "Portada",
+    "name": "Nombre",
+    "price": "Precio",
+    "item": "Artículo",
+    "details": "Detalles",
+    "action": "Acción"
+  },
+  "cart": {
+    "emptyTitle": "Aún no hay nada aquí",
+    "emptyDescription": "Busca música y añade canciones o álbumes a tu carrito.",
+    "title": "Tu carrito",
+    "totalSelected": "Total (seleccionado): USD {{total}}",
+    "song": "Canción",
+    "album": "Álbum",
+    "remove": "Eliminar",
+    "clearCart": "Vaciar carrito",
+    "buySelected": "Comprar selección"
+  },
+  "snackbar": {
+    "ok": "OK",
+    "nice": "Genial",
+    "addedToCart": "\"{{title}}\" añadido al carrito",
+    "alreadyInCart": "\"{{title}}\" ya está en tu carrito",
+    "removed": "Se eliminó \"{{title}}\"",
+    "selectItem": "Selecciona al menos un artículo para continuar",
+    "purchaseComplete": "Compra completada por USD {{total}}",
+    "cartCleared": "Carrito vaciado"
+  },
+  "common": {
+    "loading": "Cargando..."
+  }
+}

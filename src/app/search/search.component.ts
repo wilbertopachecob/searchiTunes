@@ -1,12 +1,24 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren,
+  inject,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
+  finalize,
   map,
   startWith,
   switchMap,
@@ -16,12 +28,21 @@ import {
 
 import { ItunesDataService } from '@core/services/itunes-data.service';
 import { ShoppingService } from '@cart/shopping.service';
+import { LoadingStateComponent } from '@app/shared/loading-state/loading-state.component';
 import { SearchItem } from './search-item.model';
 import { SearchService } from './search.service';
 
 @Component({
   selector: 'app-search',
-  imports: [ReactiveFormsModule, AsyncPipe, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    AsyncPipe,
+    RouterLink,
+    FaIconComponent,
+    TranslatePipe,
+    LoadingStateComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './search.component.html',
 })
 export class SearchComponent implements OnInit, OnDestroy {
@@ -31,6 +52,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private readonly shoppingService = inject(ShoppingService);
   private readonly itunesDataService = inject(ItunesDataService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
   private readonly destroy$ = new Subject<void>();
 
   @ViewChildren('audio') audios!: QueryList<ElementRef<HTMLAudioElement>>;
@@ -47,7 +69,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       tap((term) => this.form.controls.search.setValue(term, { emitEvent: false })),
       switchMap((term) => {
         this.loading = true;
-        return this.searchService.search(term).pipe(tap(() => (this.loading = false)));
+        return this.searchService.search(term).pipe(finalize(() => (this.loading = false)));
       }),
       startWith([]),
     );
@@ -73,9 +95,10 @@ export class SearchComponent implements OnInit, OnDestroy {
    */
   addToCart(item: SearchItem): void {
     const inserted = this.shoppingService.addItem(this.itunesDataService.toSearchCartItem(item));
+    const key = inserted ? 'snackbar.addedToCart' : 'snackbar.alreadyInCart';
     this.snackBar.open(
-      inserted ? `"${item.trackName}" added to cart` : `"${item.trackName}" is already in your cart`,
-      'OK',
+      this.translate.instant(key, { title: item.trackName }),
+      this.translate.instant('snackbar.ok'),
       { duration: 1800 },
     );
   }

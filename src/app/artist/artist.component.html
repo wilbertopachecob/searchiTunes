@@ -1,3 +1,5 @@
+<app-loading-state [loading]="loading" [message]="'artist.loading' | translate" />
+
 @if (artist$ | async; as artist) {
   <section class="page-section">
     <header class="section-header">
@@ -5,8 +7,12 @@
       <p>{{ artist.primaryGenreName }}</p>
     </header>
     <div class="artist-tabs">
-      <a class="btn btn-outline-dark btn-sm" routerLink="songs" routerLinkActive="active">Songs</a>
-      <a class="btn btn-outline-dark btn-sm" routerLink="albums" routerLinkActive="active">Albums</a>
+      <a class="btn btn-outline-dark btn-sm" routerLink="songs" routerLinkActive="active">
+        {{ 'artist.songs' | translate }}
+      </a>
+      <a class="btn btn-outline-dark btn-sm" routerLink="albums" routerLinkActive="active">
+        {{ 'artist.albums' | translate }}
+      </a>
     </div>
     <router-outlet />
   </section>

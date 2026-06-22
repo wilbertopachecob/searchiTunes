@@ -1,8 +1,11 @@
 <section class="hero">
   <div class="hero-card">
-    <p class="eyebrow">Music discovery + cart flow</p>
-    <h1>Welcome to your SearchiTunes app</h1>
-    <p>Find artists, preview songs, browse albums, and purchase tracks from a modernized cart flow.</p>
-    <a routerLink="/search" class="btn btn-dark btn-lg">Start searching</a>
+    <p class="eyebrow">{{ 'home.eyebrow' | translate }}</p>
+    <h1>{{ 'home.title' | translate }}</h1>
+    <p>{{ 'home.description' | translate }}</p>
+    <a routerLink="/search" class="btn btn-dark btn-lg btn-with-icon">
+      <fa-icon icon="magnifying-glass" />
+      {{ 'home.cta' | translate }}
+    </a>
   </div>
 </section>

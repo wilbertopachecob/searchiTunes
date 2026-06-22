@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "cart": "Cart"
+  },
+  "home": {
+    "eyebrow": "Music discovery + cart flow",
+    "title": "Welcome to your SearchiTunes app",
+    "description": "Find artists, preview songs, browse albums, and purchase tracks from a modernized cart flow.",
+    "cta": "Start searching"
+  },
+  "search": {
+    "title": "Find music and add to cart",
+    "subtitle": "Search tracks, preview snippets, and buy songs from one place.",
+    "placeholder": "Search artists or songs...",
+    "loading": "Searching iTunes...",
+    "addToCart": "Add to Cart",
+    "added": "Added"
+  },
+  "artist": {
+    "songs": "Songs",
+    "albums": "Albums",
+    "loading": "Loading artist..."
+  },
+  "table": {
+    "number": "#",
+    "artwork": "Artwork",
+    "name": "Name",
+    "price": "Price",
+    "item": "Item",
+    "details": "Details",
+    "action": "Action"
+  },
+  "cart": {
+    "emptyTitle": "Nothing here yet",
+    "emptyDescription": "Search for music and add songs or albums to your cart.",
+    "title": "Your cart",
+    "totalSelected": "Total (selected): USD {{total}}",
+    "song": "Song",
+    "album": "Album",
+    "remove": "Remove",
+    "clearCart": "Clear cart",
+    "buySelected": "Buy selected"
+  },
+  "snackbar": {
+    "ok": "OK",
+    "nice": "Nice",
+    "addedToCart": "\"{{title}}\" added to cart",
+    "alreadyInCart": "\"{{title}}\" is already in your cart",
+    "removed": "Removed \"{{title}}\"",
+    "selectItem": "Select at least one item to continue",
+    "purchaseComplete": "Purchase complete for USD {{total}}",
+    "cartCleared": "Cart cleared"
+  },
+  "common": {
+    "loading": "Loading..."
+  }
+}

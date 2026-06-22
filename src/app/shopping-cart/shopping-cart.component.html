@@ -1,13 +1,13 @@
 @if (shoppingItems.length === 0) {
   <div class="empty-cart">
-    <h1>Nothing here yet</h1>
-    <p>Search for music and add songs or albums to your cart.</p>
+    <h1>{{ 'cart.emptyTitle' | translate }}</h1>
+    <p>{{ 'cart.emptyDescription' | translate }}</p>
   </div>
 } @else {
   <section class="page-section">
     <header class="section-header row-header">
-      <h1>Your cart</h1>
-      <p>Total (selected): USD {{ total.toFixed(2) }}</p>
+      <h1>{{ 'cart.title' | translate }}</h1>
+      <p>{{ 'cart.totalSelected' | translate: { total: total.toFixed(2) } }}</p>
     </header>
     <div class="table-responsive">
       <table class="table app-table">
@@ -20,10 +20,10 @@
                 (change)="toggleAll($any($event.target).checked)"
               />
             </th>
-            <th scope="col">Item</th>
-            <th scope="col">Details</th>
-            <th scope="col">Price</th>
-            <th scope="col">Action</th>
+            <th scope="col">{{ 'table.item' | translate }}</th>
+            <th scope="col">{{ 'table.details' | translate }}</th>
+            <th scope="col">{{ 'table.price' | translate }}</th>
+            <th scope="col">{{ 'table.action' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +45,7 @@
                     'text-bg-info': item.type === 'album',
                   }"
                 >
-                  {{ item.type === 'song' ? 'Song' : 'Album' }}
+                  {{ (item.type === 'song' ? 'cart.song' : 'cart.album') | translate }}
                 </span>
                 <br />
                 <strong>{{ item.title }}</strong>
@@ -53,8 +53,9 @@
               </td>
               <td>{{ item.currency }} {{ item.price.toFixed(2) }}</td>
               <td>
-                <button type="button" class="btn btn-sm btn-outline-danger" (click)="remove(item)">
-                  Remove
+                <button type="button" class="btn btn-sm btn-outline-danger btn-with-icon" (click)="remove(item)">
+                  <fa-icon icon="trash" />
+                  {{ 'cart.remove' | translate }}
                 </button>
               </td>
             </tr>
@@ -63,8 +64,13 @@
       </table>
     </div>
     <div class="cart-actions">
-      <button type="button" class="btn btn-outline-secondary" (click)="clearCart()">Clear cart</button>
-      <button type="button" class="btn btn-dark" (click)="buy()">Buy selected</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="clearCart()">
+        {{ 'cart.clearCart' | translate }}
+      </button>
+      <button type="button" class="btn btn-dark btn-with-icon" (click)="buy()">
+        <fa-icon icon="bag-shopping" />
+        {{ 'cart.buySelected' | translate }}
+      </button>
     </div>
   </section>
 }

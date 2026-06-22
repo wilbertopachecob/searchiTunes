@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 
 import { ItunesDataService } from '@core/services/itunes-data.service';
+import { provideAppTesting } from '@core/i18n/translate-testing';
 import { CartItem } from '@cart/cart-item.model';
 import { ShoppingService } from '@cart/shopping.service';
 import { ArtistSongsComponent } from './artist-songs.component';
@@ -41,6 +42,7 @@ describe('ArtistSongsComponent', () => {
           provide: ActivatedRoute,
           useValue: { parent: { paramMap: of(convertToParamMap({ artistId: '900' })) } },
         },
+        ...provideAppTesting(),
       ],
     }).compileComponents();
   });
