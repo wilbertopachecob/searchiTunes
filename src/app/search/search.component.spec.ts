@@ -1,4 +1,5 @@
-import { TestBed } from '@angular/core/testing';
+import { ElementRef, QueryList } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
@@ -25,6 +26,7 @@ describe('SearchComponent', () => {
   let shoppingService: jest.Mocked<Pick<ShoppingService, 'addItem' | 'hasItem'>>;
   let itunesDataService: jest.Mocked<Pick<ItunesDataService, 'toSearchCartItem'>>;
   let snackBar: jest.Mocked<Pick<MatSnackBar, 'open'>>;
+  let router: jest.Mocked<Pick<Router, 'navigate'>>;
 
   beforeEach(async () => {
     searchService = { search: jest.fn().mockReturnValue(of([])) };
@@ -43,6 +45,7 @@ describe('SearchComponent', () => {
       }),
     };
     snackBar = { open: jest.fn() };
+    router = { navigate: jest.fn() };
 
     await TestBed.configureTestingModule({
       imports: [SearchComponent],
@@ -52,7 +55,7 @@ describe('SearchComponent', () => {
         { provide: ItunesDataService, useValue: itunesDataService },
         { provide: MatSnackBar, useValue: snackBar },
         { provide: ActivatedRoute, useValue: { queryParamMap: of(convertToParamMap({ term: '' })) } },
-        { provide: Router, useValue: { navigate: jest.fn() } },
+        { provide: Router, useValue: router },
       ],
     }).compileComponents();
   });
@@ -82,4 +85,67 @@ describe('SearchComponent', () => {
       duration: 1800,
     });
   });
+
+  it('delegates cart membership checks to ShoppingService', () => {
+    const fixture = TestBed.createComponent(SearchComponent);
+    const component = fixture.componentInstance;
+    shoppingService.hasItem.mockReturnValue(true);
+
+    expect(component.isInCart(searchItem)).toBe(true);
+    expect(shoppingService.hasItem).toHaveBeenCalledWith(searchItem.id);
+  });
+
+  it('pauses every preview except the active audio element', () => {
+    const fixture = TestBed.createComponent(SearchComponent);
+    const component = fixture.componentInstance;
+
+    const activeAudio = { pause: jest.fn() } as unknown as HTMLAudioElement;
+    const otherAudio = { pause: jest.fn() } as unknown as HTMLAudioElement;
+    component.audios = new QueryList<ElementRef<HTMLAudioElement>>();
+    component.audios.reset([
+      new ElementRef(activeAudio),
+      new ElementRef(otherAudio),
+    ]);
+
+    component.stopAll(activeAudio);
+
+    expect(otherAudio.pause).toHaveBeenCalled();
+    expect(activeAudio.pause).not.toHaveBeenCalled();
+  });
+
+  it('syncs the search term from route params on init', () => {
+    const fixture = TestBed.createComponent(SearchComponent);
+    const component = fixture.componentInstance;
+
+    fixture.detectChanges();
+
+    expect(component.form.controls.search.value).toBe('');
+    expect(searchService.search).toHaveBeenCalledWith('');
+  });
+
+  it('navigates with the debounced search term', fakeAsync(() => {
+    const fixture = TestBed.createComponent(SearchComponent);
+    fixture.detectChanges();
+
+    fixture.componentInstance.form.controls.search.setValue('bachata');
+    tick(400);
+
+    expect(router.navigate).toHaveBeenCalledWith([], {
+      relativeTo: expect.anything(),
+      queryParams: { term: 'bachata' },
+      queryParamsHandling: 'merge',
+    });
+  }));
+
+  it('stops listening to form changes after destroy', fakeAsync(() => {
+    const fixture = TestBed.createComponent(SearchComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.ngOnDestroy();
+    component.form.controls.search.setValue('bachata');
+    tick(400);
+
+    expect(router.navigate).not.toHaveBeenCalled();
+  }));
 });
