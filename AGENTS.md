@@ -1,9 +1,10 @@
 # AGENTS
 
 ## Project Purpose
-SearchiTunes is an Angular 19 app that searches iTunes music, previews songs, browses artists, and supports a purchasable cart workflow.
+SearchiTunes is an Angular app that searches iTunes music, previews songs, browses artists, and supports a purchasable cart workflow.
 
 ## Local Workflow
+- Use the Node.js version from `.nvmrc` / `package.json` `engines` before installing dependencies.
 - Install dependencies with `npm install`.
 - Start local development with `npm start`.
 - Run type checks with `npm run typecheck`.

@@ -2,7 +2,7 @@
 
 A small Angular app that searches the public [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html), previews tracks, browses an artist's songs and albums, and runs a shopping cart flow.
 
-Originally built in 2018 as an Angular 5 learning project. Modernized to **Angular 19** so it runs on current Node.js versions.
+Originally built in 2018 as a learning project. Modernized to run on current Node.js and Angular releases.
 
 ## Features
 
@@ -13,8 +13,7 @@ Originally built in 2018 as an Angular 5 learning project. Modernized to **Angul
 
 ## Requirements
 
-- Node.js 20+ (tested on Node 26)
-- npm 10+
+Supported Node.js and npm versions are declared in `package.json` (`engines`). Use `.nvmrc` with nvm, fnm, or asdf. `npm install` fails on an unsupported Node.js version (`engine-strict` in `.npmrc`).
 
 ## Development
 
@@ -35,9 +34,9 @@ Output is written to `dist/searchi-tunes/`.
 
 ## Tech stack
 
-- Angular 19 (standalone components, lazy routes)
+- Angular (standalone components, lazy routes)
 - Angular Material (theme + feedback components)
-- RxJS 7
+- RxJS
 - Jest for unit testing
 - iTunes Search API (no API key required)
 
