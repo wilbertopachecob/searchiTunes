@@ -36,7 +36,7 @@
     "@ngx-translate/http-loader": "^18.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.16.3"
+    "zone.js": "~0.16.2"
   },
   "overrides": {
     "esbuild": "0.28.1",
@@ -54,9 +54,9 @@
     "@types/jest": "^30.0.0",
     "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.67.0",
-    "eslint": "^10.8.1",
-    "jest": "^30.5.1",
-    "jest-environment-jsdom": "^30.5.1",
+    "eslint": "^10.9.1",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "jest-preset-angular": "^17.0.0",
     "ts-jest": "^29.4.12",
     "typescript": "~6.0.3"
